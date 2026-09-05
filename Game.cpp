@@ -18,7 +18,7 @@ void Game::Reset()
 	ball.visage = 'O';
 	ball.color = ConsoleColor::Cyan;
 	ResetBall();
-
+	brick.clear();
 	// TODO #2 - Add this brick and 4 more bricks to the vector
 	for (int i = 0; i < 5; ++i)
 	{
@@ -79,7 +79,13 @@ void Game::Render() const
 	for (const Box& b : brick) {
 		b.Draw();
 	}
-	
+	if (brick.empty()) {
+		std::cout << "VICTORY!Press R to reset";
+	}
+	else if (ball.y_position >= WINDOW_HEIGHT)
+	{
+		std::cout << "DEFEAT! Press r to reset";
+	}
 
 	Console::Lock(false);
 }
@@ -111,7 +117,11 @@ void Game::CheckCollision()
 	}
 
 	// TODO #6 - If no bricks remain, pause ball and display (render) victory text with R to reset
-
+	if (brick.empty())
+	{
+		ball.moving = false;
+		
+	}
 
 	if (paddle.Contains(ball.x_position + ball.x_velocity, ball.y_velocity + ball.y_position))
 	{
@@ -119,4 +129,7 @@ void Game::CheckCollision()
 	}
 
 	// TODO #7 - If ball touches bottom of window, pause ball and display (render) defeat text with R to reset
+	if (ball.y_position >= WINDOW_HEIGHT) {
+		ball.moving = false;
+	}
 }
